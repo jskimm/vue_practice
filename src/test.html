@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<title>vue.js test</title>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<div class="app">
+  <!-- <p>{{ items }}</p> -->
+	<!-- <button v-bind:title="loggedInButton">Buy</button> -->
+	<!-- v-bind:속성이름="데이터 전개한 속성값" -->
+	<p> {{ getTotalPrice|numWithDelimiter }}</p>
+	<p> {{ sumFunc|numWithDelimiter }} </p>
+</div>
+
+<script>
+  var items = [
+    {
+      name: "aaa",
+			price: 3300,
+			quantity: 3
+    },
+    {
+      name: "bbb",
+			price: 1400,
+			quantity: 4
+    },
+    {
+      name: "ccc",
+			price: 2500,
+			quantity: 2
+    },
+  ];
+  let vm = new Vue({
+    data: {
+      items,
+      loggedInButton: "you can buy after login",
+    },
+    filters: {
+      numWithDelimiter(value){
+				if(!value) return '0'
+				return value.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+			}
+		},
+		computed: {
+			getTotalPrice(){
+				return this.items.reduce((sum, item)=>{
+					return sum + (item.price * item.quantity)
+				}, 0
+				)
+			},
+			sumFunc(){
+				return this.items[0].price*3
+			}
+		}
+  }).$mount(".app");
+
+  
+  vm.$watch(
+    () => {
+      return this.items[0].price;
+    },
+    (price) => {
+      console.log(`price changed ${price}`);
+    }
+  );
+</script>
