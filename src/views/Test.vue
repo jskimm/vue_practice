@@ -1,52 +1,95 @@
 <template>
-  <div class="card-area">
-    <template v-for="(item, i) in items">
-      <v-card :key="i" width="600" color="#ffffff" class="item">
-        <v-card-title class="card-title">
-          <div class="text">{{item.title}}</div>
-          <v-btn small fab tile text color="gray">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn icon v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-divider />
-        <v-card-subtitle>
-          <div class="sub-title">Add Image Samples:</div>
-          <div class="button-area">
-            <!-- <v-btn width="80" height="60" color="#E3F2FD" large depressed class="icon-btn">
-              <v-icon color="#1565C0">videocam</v-icon>
-              <div class="text">Webcam</div>
-            </v-btn> -->
-            <v-btn width="80" height="60" color="#E3F2FD" large depressed class="icon-btn">
-              <v-icon color="#1565C0">mdi-cloud-upload</v-icon>
-              <div class="text">Upload</div>
+  <v-container>
+    <div class="card-area" style="display:inline-block">
+      <template v-for="(item, i) in this.items">
+        <v-card :key="i" width="650" color="#ffffff" class="item">
+          <v-card-title class="card-title">
+            <input
+              v-autowidth="{maxWidth: '960px', minWidth: '20px', comfortZone: 0}"
+              v-model="item.title"
+              color="#1565C0"
+              required
+              onfocus="this.select()"
+              :disabled="!item.nowModify"
+            />
+            <v-btn small fab text color="gray" @click="fixTitle(item)">
+              <v-icon v-show="!item.nowModify" color="#BDC1C6">mdi-lock-open-outline</v-icon>
+              <v-icon v-show="item.nowModify" color="#BDC1C6">mdi-lock-outline</v-icon>
             </v-btn>
-          </div>
-        </v-card-subtitle>
-      </v-card>
-    </template>
-  </div>
+            <v-spacer></v-spacer>
+            <v-btn icon>
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-divider />
+          <v-card-subtitle>
+            <div class="sub-title">Add Image Samples:</div>
+            <div class="button-area">
+              <v-btn width="80" height="60" color="#E3F2FD" large depressed claass="icon-btn">
+                <v-icon color="#1565C0">mdi-cloud-upload</v-icon>
+                <div class="text">Upload</div>
+              </v-btn>
+            </div>
+          </v-card-subtitle>
+        </v-card>
+      </template>
+
+      <v-card-subtitle>
+        <v-btn
+          class="add_classes"
+          color="rgba(0, 0, 0, 0.6)"
+          text
+          style="padding:30px; height:unset"
+          @click="addClass"
+        >
+          <v-icon>mdi-plus-box</v-icon>
+          <div class="sub-title" style="margin-left:5px">Add a class</div>
+        </v-btn>
+      </v-card-subtitle>
+    </div>
+  </v-container>
 </template>
 
 <script>
 export default {
-  data: () => ({
-    items: [
-      {
-        title: "Class 1"
-      },
-      {
-        title: "Class 2"
-      }
-    ]
-  })
+  data() {
+    return {
+      counter: 0,
+      titleRule: [
+        v => !!v || "Name is required",
+        v => (v && v.length <= 15) || "Name < 15 characters"
+      ],
+      items: [
+        {
+          title: "Class 1",
+          nowModify: false
+        },
+        {
+          title: "Class 2",
+          nowModify: false
+        }
+      ]
+    };
+  },
+  methods: {
+    addClass: function() {
+      this.items.push({
+        title: `Class ${this.items.length + 1}`,
+        nowModify: false
+      });
+    },
+    fixTitle: function(item) {
+      item.nowModify = !item.nowModify;
+    }
+  }
 };
 </script>
 
 <style lang="scss">
+.v-text-field{
+      width: 4000px;
+}
+
 .card-area {
   .v-card.item {
     border-radius: 12px;
@@ -82,5 +125,16 @@ export default {
     text-transform: capitalize;
     margin-top: 5px;
   }
+}
+.add_classes {
+  position: relative;
+  cursor: pointer;
+  width: 100%;
+  outline: 0;
+  border: 1.5px dashed #bdc1c6;
+  border-radius: 12px;
+  background: transparent;
+  overflow: hidden;
+  text-transform: none !important;
 }
 </style>
