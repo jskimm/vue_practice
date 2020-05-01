@@ -52,20 +52,10 @@
 
               <!-- if images -->
               <v-card-subtitle v-else>
-                <v-data-table :headers="headers" :items="c.data" class="elevation-1">
-                  <template v-slot:item.image="{ item }">
-                    <img :src="item.image" :key="i" width="60" height="60" class="thumbnail" />
-
-                    <!-- <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip> -->
-                  </template>
-                  <template v-slot:item.actions="{ item }">
-                    <!-- <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon> -->
-                    <v-icon xsmall @click="deleteItem(c.data, item)">mdi-delete</v-icon>
-                  </template>
-                </v-data-table>
-                <!-- <template v-for="(data, i) in c.data">
+                
+                <template v-for="(data, i) in c.data">
                   <img :src="data.image" :key="i" width="80" height="60" class="thumbnail" />
-                </template>-->
+                </template>
               </v-card-subtitle>
 
               <!-- if csv -->
@@ -98,7 +88,7 @@ export default {
         {
           text: "ID",
           align: "start",
-          sortable: true,
+          sortable: false,
           value: "id"
         },
         {
@@ -136,7 +126,7 @@ export default {
             {
               id: 2,
               image:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Cat_poster_1.jpg/390px-Cat_poster_1.jpg"
+                "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg"
             },
             {
               id: 3,
@@ -146,12 +136,12 @@ export default {
             {
               id: 4,
               image:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Cat_poster_1.jpg/390px-Cat_poster_1.jpg"
+                "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg"
             },
             {
               id: 5,
               image:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Cat_poster_1.jpg/390px-Cat_poster_1.jpg"
+                "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg"
             },
             {
               id: 6,
