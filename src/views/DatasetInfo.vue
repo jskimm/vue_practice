@@ -20,17 +20,24 @@
             <v-btn icon>
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
+            <v-btn icon @click="item.show=!item.show">
+              <v-icon>{{ item.show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
+            </v-btn>
           </v-card-title>
           <v-divider />
-          <v-card-subtitle>
-            <div class="sub-title">Add Image Samples:</div>
-            <div class="button-area">
-              <v-btn width="80" height="60" color="#E3F2FD" large depressed claass="icon-btn">
-                <v-icon color="#1565C0">mdi-cloud-upload</v-icon>
-                <div class="text">Upload</div>
-              </v-btn>
+          <v-expand-transition>
+            <div v-show="item.show">
+              <v-card-subtitle>
+                <div class="sub-title">Add Image Samples:</div>
+                <div class="button-area">
+                  <v-btn width="80" height="60" color="#E3F2FD" large depressed claass="icon-btn">
+                    <v-icon color="#1565C0">mdi-cloud-upload</v-icon>
+                    <div class="text">Upload</div>
+                  </v-btn>
+                </div>
+              </v-card-subtitle>
             </div>
-          </v-card-subtitle>
+          </v-expand-transition>
         </v-card>
       </template>
 
@@ -54,7 +61,7 @@
 export default {
   data() {
     return {
-      counter: 0,
+      show: true,
       titleRule: [
         v => !!v || "Name is required",
         v => (v && v.length <= 15) || "Name < 15 characters"
@@ -62,11 +69,14 @@ export default {
       items: [
         {
           title: "Class 1",
-          nowModify: false
+          nowModify: false,
+          show: true
         },
         {
           title: "Class 2",
-          nowModify: false
+          nowModify: false,
+          show: true
+
         }
       ]
     };
@@ -75,7 +85,8 @@ export default {
     addClass: function() {
       this.items.push({
         title: `Class ${this.items.length + 1}`,
-        nowModify: false
+        nowModify: false,
+        show: true
       });
     },
     fixTitle: function(item) {
