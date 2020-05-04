@@ -56,6 +56,8 @@
                 <template v-for="(data, i) in c.data">
                   <img :src="data.image" :key="i" width="80" height="60" class="thumbnail" />
                 </template>
+                <v-pagination v-model="page" :length="5">
+                </v-pagination>
               </v-card-subtitle>
 
               <!-- if csv -->
@@ -84,29 +86,8 @@
 export default {
   data() {
     return {
-      headers: [
-        {
-          text: "ID",
-          align: "start",
-          sortable: false,
-          value: "id"
-        },
-        {
-          text: "Image",
-          sortable: false,
-          value: "image"
-        },
-        {
-          text: "Actions",
-          value: "actions"
-        }
-      ],
-
+      page: 1,
       show: true,
-      titleRule: [
-        v => !!v || "Name is required",
-        v => (v && v.length <= 15) || "Name < 15 characters"
-      ],
       menus: [
         { title: "Delete Class" },
         { title: "Test" },
@@ -160,6 +141,9 @@ export default {
     };
   },
   methods: {
+    movePage: function() {
+      // [TODO] server로부터 이미지 idx, src 받아와야함
+    },
     addClass: function() {
       this.classes.push({
         title: `Class ${this.classes.length + 1}`,
