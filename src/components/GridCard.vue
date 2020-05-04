@@ -5,7 +5,7 @@
       max-width="200"
       height="260px"
       :class="withButton? 'icon-delete-btn' : ''"
-      @mousedown="handleMouseDown"
+      @mousedown="handleMousedown"
     >
       <v-img :src="item.src" height="150px" />
       <v-card-title>{{item.title}}</v-card-title>
@@ -30,7 +30,7 @@ export default {
   },
   computed: {},
   methods: {
-    handleMouseDown() {
+    handleMousedown() {
       this.$emit('mousefunction', this.item);
     }
   }
