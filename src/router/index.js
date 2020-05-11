@@ -19,14 +19,30 @@ Vue.use(VueRouter)
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/test',
+    path: '/DatasetMain',
+    name: 'DatasetMain',
+    component: () => import('../views/DatasetMain.vue')
+  },
+  {
+    path: '/DatasetInfo',
+    name: 'DatasetInfo',
+    component: () => import('../views/DatasetInfo.vue')
+  },
+  {
+    path: '/Test',
     name: 'Test',
     component: () => import('../views/Test.vue')
+  },
+  {
+    path: '/Demo',
+    name: 'Demo',
+    component: () => import('../views/Demo.vue')
   }
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: "history"
 })
 
 export default router

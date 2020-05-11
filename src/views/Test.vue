@@ -1,140 +1,153 @@
 <template>
-  <v-container>
-    <div class="card-area" style="display:inline-block">
-      <template v-for="(item, i) in this.items">
-        <v-card :key="i" width="650" color="#ffffff" class="item">
-          <v-card-title class="card-title">
-            <input
-              v-autowidth="{maxWidth: '960px', minWidth: '20px', comfortZone: 0}"
-              v-model="item.title"
-              color="#1565C0"
-              required
-              onfocus="this.select()"
-              :disabled="!item.nowModify"
-            />
-            <v-btn small fab text color="gray" @click="fixTitle(item)">
-              <v-icon v-show="!item.nowModify" color="#BDC1C6">mdi-lock-open-outline</v-icon>
-              <v-icon v-show="item.nowModify" color="#BDC1C6">mdi-lock-outline</v-icon>
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn icon>
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </v-card-title>
-          <v-divider />
-          <v-card-subtitle>
-            <div class="sub-title">Add Image Samples:</div>
-            <div class="button-area">
-              <v-btn width="80" height="60" color="#E3F2FD" large depressed claass="icon-btn">
-                <v-icon color="#1565C0">mdi-cloud-upload</v-icon>
-                <div class="text">Upload</div>
-              </v-btn>
-            </div>
-          </v-card-subtitle>
-        </v-card>
-      </template>
+  <v-app id="inspire">
+    <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
+      <v-list>
+        <template v-for="item in items">
+          <v-list-group
+            v-if="item.children"
+            :key="item.text"
+            v-model="item.active"
+            :prepend-icon="item.active ? item.icon : item['icon-alt']"
+            append-icon
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.text }}</v-list-item-title>
+              </v-list-item-content>
+            </template>
 
-      <v-card-subtitle>
-        <v-btn
-          class="add_classes"
-          color="rgba(0, 0, 0, 0.6)"
-          text
-          style="padding:30px; height:unset"
-          @click="addClass"
-        >
-          <v-icon>mdi-plus-box</v-icon>
-          <div class="sub-title" style="margin-left:5px">Add a class</div>
-        </v-btn>
-      </v-card-subtitle>
-    </div>
-  </v-container>
+            <v-list-item v-for="(child, i) in item.children" :key="i" link @click="$router.push({name: 'About'})">
+              <!-- <v-list-item-action v-if="child.icon"> -->
+              <!-- </v-list-item-action> -->
+              <v-list-item-content>
+                <v-list-item-title >
+                  <v-icon>{{ child.icon }}</v-icon>
+                  {{ child.text }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+
+          <v-list-item v-else :key="item.text" link>
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.text }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+        <span class="hidden-sm-and-down">Google Contacts</span>
+      </v-toolbar-title>
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="mdi-magnify"
+        label="Search"
+        class="hidden-sm-and-down"
+      />
+      <v-spacer />
+      <v-btn icon>
+        <v-icon>mdi-apps</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-bell</v-icon>
+      </v-btn>
+      <v-btn icon large>
+        <v-avatar size="32px" item>
+          <v-img src="https://cdn.vuetifyjs.com/images/logos/logo.svg" alt="Vuetify" />
+        </v-avatar>
+      </v-btn>
+    </v-app-bar>
+    <v-content>
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-btn :href="source" icon large target="_blank" v-on="on">
+                <v-icon large>mdi-code-tags</v-icon>
+              </v-btn>
+            </template>
+            <span>Source</span>
+          </v-tooltip>
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                large
+                href="https://codepen.io/johnjleider/pen/MNYLdL"
+                target="_blank"
+                v-on="on"
+              >
+                <v-icon large>mdi-codepen</v-icon>
+              </v-btn>
+            </template>
+            <span>Codepen</span>
+          </v-tooltip>
+        </v-row>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      counter: 0,
-      titleRule: [
-        v => !!v || "Name is required",
-        v => (v && v.length <= 15) || "Name < 15 characters"
-      ],
-      items: [
-        {
-          title: "Class 1",
-          nowModify: false
-        },
-        {
-          title: "Class 2",
-          nowModify: false
-        }
-      ]
-    };
+  props: {
+    source: String
   },
+  data: () => ({
+    dialog: false,
+    drawer: null,
+    items: [
+      { icon: "mdi-contacts", text: "Contacts" },
+      { icon: "mdi-history", text: "Frequently contacted" },
+      { icon: "mdi-content-copy", text: "Duplicates" },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-chevron-down",
+        text: "Project",
+        active: true,
+        children: [
+          {
+            icon: "mdi-plus",
+            text: "add project",
+            click: "addProject"
+          }
+        ]
+      },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-chevron-down",
+        text: "More",
+        active: false,
+        children: [
+          { text: "Import" },
+          { text: "Export" },
+          { text: "Print" },
+          { text: "Undo changes" },
+          { text: "Other contacts" }
+        ]
+      },
+      { icon: "mdi-settings", text: "Settings" },
+      { icon: "mdi-message", text: "Send feedback" },
+      { icon: "mdi-help-circle", text: "Help" },
+      { icon: "mdi-cellphone-link", text: "App downloads" },
+      {
+        icon: "mdi-keyboard",
+        text: "Go to the old version",
+        href: "http://www.naver.com"
+      }
+    ]
+  }),
   methods: {
-    addClass: function() {
-      this.items.push({
-        title: `Class ${this.items.length + 1}`,
-        nowModify: false
-      });
-    },
-    fixTitle: function(item) {
-      item.nowModify = !item.nowModify;
-    }
+      
   }
 };
 </script>
-
-<style lang="scss">
-.v-text-field{
-      width: 4000px;
-}
-
-.card-area {
-  .v-card.item {
-    border-radius: 12px;
-    margin: 20px;
-  }
-  .card-title {
-    padding: 8px 16px;
-    font-size: 20px;
-    font-weight: 500;
-  }
-}
-.sub-title {
-  font-size: 16px;
-  font-weight: 500;
-}
-.button-area {
-  margin-top: 15px;
-  .v-btn__content {
-    flex-direction: column;
-  }
-  .icon-btn {
-    margin: 0 3px;
-    &:first-of-type {
-      margin-left: 0px;
-    }
-    &:last-of-type {
-      margin-right: 0px;
-    }
-  }
-  .text {
-    color: #1565c0;
-    font-size: 12px;
-    text-transform: capitalize;
-    margin-top: 5px;
-  }
-}
-.add_classes {
-  position: relative;
-  cursor: pointer;
-  width: 100%;
-  outline: 0;
-  border: 1.5px dashed #bdc1c6;
-  border-radius: 12px;
-  background: transparent;
-  overflow: hidden;
-  text-transform: none !important;
-}
-</style>
